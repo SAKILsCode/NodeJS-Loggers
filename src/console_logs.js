@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('./logger');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -8,10 +9,10 @@ app.get('/', (req, res) => {
 
 app.listen(4000, () => {
   console.log('server is listening on port: 4000');
-})
+});
 
-console.log('Hello World');
-console.error('Error');
-console.info('Information');
-console.warn('Warning');
-console.debug('Debug');
+logger.log('Hello World');
+logger.error('Error');
+logger.info('Information');
+logger.warn('Warning');
+logger.debug('Debug');
