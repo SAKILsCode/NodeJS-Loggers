@@ -6,7 +6,7 @@ const useMorgan = (app) => {
   } else {
     app.use(
       morgan('dev', {
-        skip: (req, res) => {
+        skip: (_req, res) => {
           return res.statusCode < 400;
         },
         stream: process.stderr,
@@ -15,7 +15,7 @@ const useMorgan = (app) => {
 
     app.use(
       morgan('dev', {
-        skip: (req, res) => {
+        skip: (_req, res) => {
           return res.statusCode >= 400;
         },
         stream: process.stdout,

@@ -43,9 +43,8 @@ app.use(
 );
 */
 
-
-useMorgan(app)
-
+// Using morgan
+useMorgan(app);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'welcome' });
