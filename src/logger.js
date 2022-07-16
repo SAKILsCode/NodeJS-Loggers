@@ -1,32 +1,45 @@
-const winston = require('winston');
+const { createLogger, format, transports, Logger } = require('winston');
 
-/*
-const logger = {
-  log: console.log,
-  error: console.error,
-  info: console.info,
-  warn: console.warn,
-  debug: console.debug,
+const level = process.env.LOG_LEVEL || 'debug';
+
+const formatParams = ({ level, message, timestamp, ...args }) => {
+  const ts = timestamp.slice(0, 19).replace('T', ' ');
+  return `${ts} ${level}: ${message} ${
+    Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
+  }`;
 };
-*/
 
-const format = winston.format;
+const devFormat = format.combine(
+  format.colorize({ all: true }),
+  format.timestamp(),
+  format.align(),
+  format.printf(formatParams)
+);
 
-const logger = winston.createLogger({
-  level: 'info',
-  format: format.combine(
-    format.colorize(),
-    format.timestamp(),
-    format.align(),
-    format.printf(({ level, message, timestamp, ...args }) => {
-      const ts = timestamp.slice(0, 19).replace('T', ' ');
-      return `${ts} ${level}: ${message} ${
-        Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
-      }`;
-    })
-  ),
-
-  transports: [new winston.transports.Console()],
-});
+const prodFormat = format.combine(
+  format.timestamp(),
+  format.align(),
+  format.printf(formatParams)
+);
+/**
+ * @type {Logger}
+ */
+let logger = null;
+if (process.env.NODE_ENV && process.env.NODE_ENV.trim() === 'production') {
+  logger = createLogger({
+    level,
+    format: prodFormat,
+    transports: [
+      new transports.File({ filename: 'logs/error.log', level: 'error' }),
+      new transports.File({ filename: 'logs/combined.log' }),
+    ],
+  });
+} else {
+  logger = createLogger({
+    level,
+    format: devFormat,
+    transports: new transports.Console(),
+  });
+}
 
 module.exports = logger;
