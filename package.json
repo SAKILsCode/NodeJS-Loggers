@@ -4,13 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./src/morgan.js",
+    "dev": "nodemon ./src/winston.js",
     "prod": "set NODE_ENV=production && nodemon ./src/morgan.js"
   },
   "dependencies": {
     "express": "^4.18.1",
     "morgan": "^1.10.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
