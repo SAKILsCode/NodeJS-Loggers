@@ -1,5 +1,6 @@
 const express = require('express');
-const morgan = require('morgan');
+// const morgan = require('morgan');
+const useMorgan = require('./useMorgan');
 const uuid = require('uuid');
 const app = express();
 
@@ -9,13 +10,13 @@ const app = express();
 // app.use(morgan('short'));
 // app.use(morgan('tiny'));
 
-
 app.use((req, _res, next) => {
-  const id = uuid.v4()
-  req.id = id
-  next()
-})
+  const id = uuid.v4();
+  req.id = id;
+  next();
+});
 
+/*
 morgan.token('random', (req, res) => {
   return Math.round(Math.random() * 100);
 });
@@ -24,7 +25,11 @@ morgan.token('request-id', (req, res) => {
   return req.id;
 });
 
-// app.use(morgan(':date[iso] | :method | :url | :status | :response-time[4]ms | RandomNum: :random | Request ID: :request-id'));
+// app.use(
+//   morgan(
+//     ':date[iso] | :method | :url | :status | :response-time[4]ms | RandomNum: :random | Request ID: :request-id'
+//   )
+// );
 
 app.use(
   morgan((tokens, req, res) => {
@@ -32,10 +37,15 @@ app.use(
       method: tokens['method'](req, res),
       status: tokens['status'](req, res),
       random: tokens['random'](req, res),
-      requestId: tokens['request-id'](req, res)
+      requestId: tokens['request-id'](req, res),
     });
   })
 );
+*/
+
+
+useMorgan(app)
+
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'welcome' });
